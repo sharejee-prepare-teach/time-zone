@@ -23,8 +23,9 @@ public class ZonedDateTimeExample {
 
         System.out.println(realDateTime);
 
-        getSampleTimeZone(realDateTime);
+        //getSampleTimeZone(realDateTime);
         //getKhmerDateTimeZone(realDateTime);
+        System.out.println(getReturnKhmerDateTimeZone(realDateTime));
     }
     private static void getSampleTimeZone(String dateInString){
         //String dateInString = "22-1-2015 10:15:55 AM";
@@ -98,6 +99,20 @@ public class ZonedDateTimeExample {
         DateTimeFormatter format = DateTimeFormatter.ofPattern(DATE_FORMAT);
         System.out.println("\n---DateTimeFormatter---");
         System.out.println("Date (Singapore) : " + format.format(asiaZonedDateTime));
+    }
+
+    private static String getReturnKhmerDateTimeZone(String dateInString){
+        LocalDateTime ldt = LocalDateTime.parse(dateInString, DateTimeFormatter.ofPattern(DATE_FORMAT));
+
+        ZoneId singaporeZoneId = ZoneId.of("Asia/Singapore");
+        System.out.println("TimeZone : " + singaporeZoneId);
+
+        //LocalDateTime + ZoneId = ZonedDateTime
+        ZonedDateTime asiaZonedDateTime = ldt.atZone(singaporeZoneId);
+        System.out.println("Date (Singapore) : " + asiaZonedDateTime);
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return String.valueOf(format.format(asiaZonedDateTime));
     }
 }
 
