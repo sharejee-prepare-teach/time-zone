@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
  * Created by : Ron Rith
  * Create Date: 03/07/2018.
  */
-public class ZonedDateTimeExample {
+public class CoreZonedDateTime {
     private static final String DATE_FORMAT = "dd-M-yyyy hh:mm:ss a";
 
     public static void main(String[] args) {
@@ -17,17 +17,21 @@ public class ZonedDateTimeExample {
         LocalDate localDate = LocalDate.now();
         LocalTime localTime = LocalTime.now();
 
-        String time = getRealTimeWithAMPM(localTime);
-        String date = getRealTimeWithFormat(localDate);
-        String realDateTime = getRealDateTime(date,localTime,time);
+        String amPM = getRealTimeWithAMPM(localTime);
+        String khmerTime = getKhmerRealTime(localTime);
+        String khmerDate = getRealTimeWithFormat(localDate);
+        String realDateTime = getKhmerRealDateTime(khmerDate,khmerTime,amPM);
 
-        System.out.println(realDateTime);
+        //System.out.println(realDateTime);
 
         //getSampleTimeZone(realDateTime);
         //getKhmerDateTimeZone(realDateTime);
-        System.out.println(getReturnKhmerDateTimeZone(realDateTime));
+        System.out.println("Return Khmer AM PM => " + amPM);
+        System.out.println("Return Khmer Time => " + khmerTime);
+        System.out.println("Return Khmer Date => " + khmerDate);
+        System.out.println("Return Khmer Date Time => " + getReturnKhmerDateTimeZone(realDateTime));
     }
-    private static void getSampleTimeZone(String dateInString){
+    public static void getSampleTimeZone(String dateInString){
         //String dateInString = "22-1-2015 10:15:55 AM";
         LocalDateTime ldt = LocalDateTime.parse(dateInString, DateTimeFormatter.ofPattern(DATE_FORMAT));
 
@@ -50,16 +54,12 @@ public class ZonedDateTimeExample {
         System.out.println("Date (New York) : " + format.format(nyDateTime));
     }
 
-    private static String getRealDateTime(String localDate,LocalTime localTime,String time){
-        String localDateTime = localDate + " " + localTime;
-
-        //cute dot(.)
-        StringTokenizer stringTokenizer = new StringTokenizer(String.valueOf(localDateTime),".");
-        localDateTime = stringTokenizer.nextToken();
-        return localDateTime + " "+time;
+    public static String getKhmerRealDateTime(String localDate,String localTime,String time){
+        String localDateTime = localDate + " " + localTime + " "+ time;
+        return localDateTime;
     }
 
-    private static String getRealTimeWithAMPM(LocalTime time){
+    public static String getRealTimeWithAMPM(LocalTime time){
         String amPM = "";
 
         StringTokenizer stringTokenizer = new StringTokenizer(String.valueOf(time),":");
@@ -71,12 +71,20 @@ public class ZonedDateTimeExample {
             return "PM";
         }
     }
+    public static String getKhmerRealTime(LocalTime time){
+        String khmerTime = "";
 
-    private static String getRealTimeWithFormat(LocalDate date){
+        StringTokenizer stringTokenizer = new StringTokenizer(String.valueOf(time),".");
+        khmerTime = stringTokenizer.nextToken();
+        return khmerTime;
+    }
+
+
+    public static String getRealTimeWithFormat(LocalDate date){
         String format = "";
 
         StringTokenizer stringTokenizer = new StringTokenizer(String.valueOf(date), "-");
-        DateFormat dateFormat = new DateFormat();
+        CoreDateFormat dateFormat = new CoreDateFormat();
         while (stringTokenizer.hasMoreTokens()) {
             dateFormat.setYear(stringTokenizer.nextToken());
             dateFormat.setMonth(stringTokenizer.nextToken());
@@ -86,7 +94,7 @@ public class ZonedDateTimeExample {
         return format;
     }
 
-    private static void getKhmerDateTimeZone(String dateInString){
+    public static void getKhmerDateTimeZone(String dateInString){
         LocalDateTime ldt = LocalDateTime.parse(dateInString, DateTimeFormatter.ofPattern(DATE_FORMAT));
 
         ZoneId singaporeZoneId = ZoneId.of("Asia/Singapore");
@@ -101,15 +109,13 @@ public class ZonedDateTimeExample {
         System.out.println("Date (Singapore) : " + format.format(asiaZonedDateTime));
     }
 
-    private static String getReturnKhmerDateTimeZone(String dateInString){
+    public static String getReturnKhmerDateTimeZone(String dateInString){
         LocalDateTime ldt = LocalDateTime.parse(dateInString, DateTimeFormatter.ofPattern(DATE_FORMAT));
 
         ZoneId singaporeZoneId = ZoneId.of("Asia/Singapore");
-        System.out.println("TimeZone : " + singaporeZoneId);
 
         //LocalDateTime + ZoneId = ZonedDateTime
         ZonedDateTime asiaZonedDateTime = ldt.atZone(singaporeZoneId);
-        System.out.println("Date (Singapore) : " + asiaZonedDateTime);
 
         DateTimeFormatter format = DateTimeFormatter.ofPattern(DATE_FORMAT);
         return String.valueOf(format.format(asiaZonedDateTime));
