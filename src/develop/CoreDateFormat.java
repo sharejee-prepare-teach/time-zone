@@ -4,7 +4,7 @@ package develop;
 Create By: Ron Rith
 Create Date: 3/8/2018
 */
-public class DateFormat {
+public class CoreDateFormat {
     private String year;
     private String month;
     private String day;
